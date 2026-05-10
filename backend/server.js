@@ -2,17 +2,23 @@ import express from "express";
 import cors from "cors";
 import multer from "multer";
 import dotenv from "dotenv";
+import path from "path";
 
-import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
+import { fileURLToPath } from "url";
+
+import { PDFLoader }
+    from "@langchain/community/document_loaders/fs/pdf";
 
 import {
     RecursiveCharacterTextSplitter,
 } from "@langchain/textsplitters";
 
-import { HuggingFaceInferenceEmbeddings }
-    from "@langchain/community/embeddings/hf";
+import {
+    HuggingFaceInferenceEmbeddings,
+} from "@langchain/community/embeddings/hf";
 
-import { QdrantVectorStore } from "@langchain/qdrant";
+import { QdrantVectorStore }
+    from "@langchain/qdrant";
 
 import Groq from "groq-sdk";
 
@@ -27,7 +33,29 @@ const upload = multer({
     dest: "uploads/",
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
+
+
+
+
+// ================= PATH =================
+
+const __filename =
+    fileURLToPath(import.meta.url);
+
+const __dirname =
+    path.dirname(__filename);
+
+
+
+
+// ================= STATIC FRONTEND =================
+
+app.use(
+    express.static(
+        path.join(__dirname, "public")
+    )
+);
 
 
 
@@ -36,7 +64,8 @@ const PORT = 3000;
 
 const embeddings =
     new HuggingFaceInferenceEmbeddings({
-        model: "sentence-transformers/all-MiniLM-L6-v2",
+        model:
+            "sentence-transformers/all-MiniLM-L6-v2",
     });
 
 
@@ -45,8 +74,15 @@ const embeddings =
 // ================= ROOT =================
 
 app.get("/", (req, res) => {
-    res.send("Backend running successfully");
+
+    res.sendFile(
+        path.join(__dirname, "public", "index.html")
+    );
 });
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = "";
 
 
 
@@ -7,7 +7,8 @@ const BACKEND_URL = "http://localhost:3000";
 
 async function uploadPDF() {
 
-    const fileInput = document.getElementById("pdfFile");
+    const fileInput =
+        document.getElementById("pdfFile");
 
     const file = fileInput.files[0];
 
@@ -35,8 +36,16 @@ async function uploadPDF() {
 
         const data = await response.json();
 
-        document.getElementById("uploadStatus")
-            .innerText = data.message;
+        if (response.ok) {
+
+            document.getElementById("uploadStatus")
+                .innerText = data.message;
+
+        } else {
+
+            document.getElementById("uploadStatus")
+                .innerText = data.error;
+        }
 
     } catch (error) {
 
@@ -85,8 +94,16 @@ async function askQuestion() {
 
         const data = await response.json();
 
-        document.getElementById("answer")
-            .innerText = data.answer;
+        if (response.ok) {
+
+            document.getElementById("answer")
+                .innerText = data.answer;
+
+        } else {
+
+            document.getElementById("answer")
+                .innerText = data.error;
+        }
 
     } catch (error) {
 
